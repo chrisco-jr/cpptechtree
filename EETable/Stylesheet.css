@@ -1,0 +1,77 @@
+/*<!-- This CSS package applies Google styling; it should always be included. -->
+<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">-->
+<style>*/
+.mainGrid
+{
+    display: grid;
+    grid-template-columns: repeat(8, 2fr);
+    grid-template-rows: auto;
+    position: absolute;
+    top: 100px; 
+}   
+    
+    
+.classBox
+{
+    
+  position: relative;  
+  border: 2px solid black;
+    border-radius: 0% 20% 20% 0%;
+    height: 100px;
+    width: 175px;
+    margin: 30px;
+    text-align: left;
+    box-sizing: border-box;
+    
+    
+}
+
+
+.classBox:hover
+{
+    background-color: orange;
+}
+.clicked
+{
+  background-color: salmon;
+  color: white;
+  
+}
+
+.hide
+{
+  opacity: 10%;
+}
+.disabled{
+  pointer-events: none;
+}
+
+html
+{
+    font-family: sans-serif;
+}
+h1
+{
+    font-size: 28px;
+}
+
+h3
+{
+  font-size: 0.7rem;
+}
+h4
+{
+  font-size: 0.6rem;
+}
+
+canvas{
+  z-index: -5;
+  position: absolute;
+  background-color: #abcccc;
+  top: 70px;
+  
+}
+
+/*</style>*/
+
+
