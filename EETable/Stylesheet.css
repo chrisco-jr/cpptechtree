@@ -1,13 +1,19 @@
-/*<!-- This CSS package applies Google styling; it should always be included. -->
-<!--<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">-->
+/*<!-- This CSS package applies Google styling; it should always be included.
+<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">-->
 <style>*/
+*
+{
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
 .mainGrid
 {
     display: grid;
-    grid-template-columns: repeat(8, 2fr);
+    grid-template-columns: repeat(11, 1fr);
     grid-template-rows: auto;
     position: absolute;
-    top: 100px; 
+    top: 100px;
+    
+
 }   
     
     
@@ -30,11 +36,19 @@
 .classBox:hover
 {
     background-color: orange;
+    cursor: pointer;
 }
+
+.elective
+{
+  border: 2px dotted black;
+}
+
 .clicked
 {
   background-color: salmon;
   color: white;
+  
   
 }
 
@@ -46,15 +60,21 @@
   pointer-events: none;
 }
 
-html
+.found
 {
-    font-family: sans-serif;
+  background-color: #ffff99;
 }
+
+
+
 h1
 {
     font-size: 28px;
 }
-
+h2
+{
+  font-size: 1.2rem;
+}
 h3
 {
   font-size: 0.7rem;
@@ -64,14 +84,131 @@ h4
   font-size: 0.6rem;
 }
 
-canvas{
+#myCanvas{
   z-index: -5;
   position: absolute;
   background-color: #abcccc;
   top: 70px;
+  width: 2500px;
+  height: 1600px;
+  border: 3px solid black;
+  
   
 }
 
-/*</style>*/
+.sidebar {
+  line-height: 1.5;
+  color: #eeffff;
+  border-left: 2px solid black;
+  align: right;
+  background-color: #24478f;
+  width: 15rem;
+  height: 100%;
+  top: 0px;
+  right: 0px;
+  padding: 0;
+  position: fixed;
+  transition: transform 200ms ease-in;
+  z-index: 1;
+  overflow: auto;
+  white-space: nowrap;
+}
+.sidebar--isHidden {
+    transform: translateX(+16rem);
+    transition: transform 200ms ease-out;
+  }
+.classSelected
+{
+  text-align: center;
+}
+.prereqList
+{
+  text-align: center;
+  
+  max-width: 12rem;
+  width: 80%;
+}
+.prereqItems
+{
+  background-color: #242070;
+  border: 2px solid black;
+  justify-content: center;
+  display: flex;
+}
+
+.sidebarbtn
+{
+  min-width: 100px;
+  max-width: 200px;
+  min-height: 20px;
+  max-height: 50px;
+  width: 10rem;
+  height: 10rem;
+  text-align: center; 
+  margin-top: 2rem;
+  border-radius: 20% 5% 20% 5%;
+  background-color: #24478f;
+  color: #eeffff;
+
+}
+.sidebarbtn:hover
+{
+  background-color: #24878f;
+}
+.search
+{
+  position: absolute;
+}
+#class-search
+{
+  margin-right: 5px;
+  border: 2px solid;
+}
+#searchButton
+{
+  border: 2px solid;
+}
+
+/* mobile screen */
+@media (max-width: 800px){
+  .mainGrid {
+   transform: scale(0.6);
+   transform-origin: 0 0;
+   
+  }
+  .sidebar {
+   
+  border-left: 2px solid black;
+  text-align: left;
+  padding-left: 0;
+  
+  width: 8rem;
+  
+  z-index: 1;
+}
+.sidebar--isHidden {
+    transform: translateX(+10rem);
+    transition: transform 200ms ease-out;
+  }
+  .sidebarbtn
+  {
+    width: 2rem;
+    height: 2rem;
+  }
+  h1
+  {
+    font-size: 14px;
+  }
+  h2
+  {
+    font-size: 10px;
+  }
+  .search
+  {
+   font-size: 10px;
+  }
+  
+}
+//</style>
 
 
