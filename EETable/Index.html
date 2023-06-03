@@ -1,129 +1,380 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <?!= include('Stylesheet'); ?>
     
     <base target="_top">
     <meta charset="UTF-8" />
     <title>EE Table</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
-<h1>Hello World</h1>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="search">
+    <label for="class-search">Search for Class or Code <em>(4 Character Minimum)</em>: </label>
+    <input type="search" id="class-search" name="q">
+
+    <button class="search" id="searchButton">Search</button>
+  </div>
+  <!--SIDEBAR WIP-->
+  <div style=float: right>
+    <div class="sidebar">
+      <div class="sidebarList">
+        <h1 class="classSelected">No Class Selected</h1>
+          <div class = "prereqItems">
+            <h2 class="prereqList">No Prerequisites</h2>
+          </div>
+      </div>
+    </div>
+
+    <button class="sidebarbtn" id="toggle">Show Sidebar</button>
+
+  </div>
   
   <div class="mainGrid">
-        <div class = "column 1">
-            <button class = "classBox"><h3>BIO 1110 - Life Science</h3>
-              <h4>Prerequisites: Undergraduate Standing</h4></button>
-            <button class = "classBox"><h3>CHM 1150 - General Chemistry for Engineers</h3>
-              <h4>Prerequisites: MAT 1050, or higher</h4></button>
-            <button class = "classBox"><h3>MAT 1140 - Calculus I</h3>
-              <h4>Prerequisites: Placement or MAT 1050, 1060, 1070</h4></button>
-            <button class = "classBox"><h3>PHY 1510 - Introduction to Newtonian Mechanics </h3>
-              <h4>Prerequisites: MAT 1140</h4></button>
-            <button class = "classBox"><h3>PHY 1510L - Introduction to Newtonian Mechanics Laboratory</h3>
-              <h4>Prerequisites: PHY 1510 is corequisite</h4></button>
-        </div>
-        
-    
-        <div class = "column 2">
-            <button class = "classBox"><h3>ECE 1101 - Electrical Circuit Analysis I</h3>
-              <h4>Prerequisites: MAT 1140</h4></button></button>
-            <button class = "classBox"><h3>ECE 1101L - Electrical Circuit Analysis Laboratory</h3>
-              <h4>Prerequisites: ECE 1101 is corequisite</h4></button>
-            <button class = "classBox"><h3>ECE 1310 - C for Engineers</h3>
-              <h4>Prerequisites: MAT 1140</h4></button>
-            <button class = "classBox"><h3>MAT 1150 - Calculus II</h3>
-              <h4>Prerequisites: MAT 1140</h4></button>
-            <button class = "classBox"><h3>PHY 1520 - Introduction to Electricity and Magnetism</h3>
-              <h4>Prerequisites: MAT 1150, PHY 1510</h4></button>
-            <button class = "classBox"><h3>PHY 1520L - Introduction to Electricity and Magnetism Laboratory</h3>
-              <h4>Prerequisites: PHY 1520 is corequisite</h4></button>
-        </div>
-        
-  
-        <div class = "column 3">
-             <button class = "classBox"><h3>ECE 2101 - Electrical Circuit Analysis II</h3>
-              <h4>Prerequisites: ECE 1101, ECE 1101L, PHY 1520, MAT 2240</h4></button>
-            <button class = "classBox"><h3>ECE 2101L - Electrical Circuit Analysis II Laboratory</h3>
-              <h4>Prerequisites: ECE 2101 is corequisite</h4></button>
-            <button class = "classBox"><h3>ECE 2200 - Introduction to Microelectronics Circuits</h3>
-              <h4>Prerequisites: CHM 1150 or CHM 1210, ECE 1101</h4></button>
-            <button class = "classBox"><h3>MAT 2140 - Calculus III</h3>
-              <h4>Prerequisites: MAT 1150</h4></button>
-            
-        </div>
-  
-  
-        <div class = "column 4">
-            <button class = "classBox"><h3>ECE 2200L - Introduction to Microelectronics Circuits Laboratory</h3>
-              <h4>Prerequisites: ECE 1101L, ECE 2200</h4></button>
-            <button class = "classBox"><h3>MAT 2240 - Elementary Linear Algebra and Differential Equations</h3>
-              <h4>Prerequisites: MAT 1150</h4></button>
-            <button class = "classBox"><h3>ECE 2300 - Digital Logic Design</h3>
-              <h4>Prerequisites: ECE 1310, ECE 1101, ECE 1101L</h4></button>
-            <button class = "classBox"><h3>ECE 2300L - Digital Logic Design Laboratory</h3>
-              <h4>Prerequisites: ECE 2300 is corequisite</h4></button>
-        </div>
-        
-
-        <div class = "column 5">
-            <button class = "classBox"><h3>ECE 3101 - Signals and Systems</h3>
-              <h4>Prerequisites: ECE 2101</h4></button>
-            <button class = "classBox"><h3>ECE 3200 - Microelectronic Devices and Circuits</h3>
-              <h4>Prerequisites: ECE 2101, ECE 2200</h4></button>
-            <button class = "classBox"><h3>ECE 3250 - Electromagnetic Fields</h3>
-              <h4>Prerequisites: MAT 2140, MAT 2240, PHY 1520, ECE 2200</h4></button>
-            <button class = "classBox"><h3>ECE 3301 - Introduction to Microcontrollers</h3>
-              <h4>Prerequisites: ECE 2300</h4></button>
-            <button class = "classBox"><h3>ECE 3301L - Introduction to Microcontrollers Laboratory</h3>
-              <h4>Prerequisites: ECE 2300, ECE 2300L, ECE 3301 is corequisite</h4></button>
-            <button class = "classBox"><h3>ECE 3709 - Control Systems Engineering</h3>
-              <h4>Prerequisites: ECE 2101, MAT 2240</h4></button>
-            <button class = "classBox"><h3>ECE 3709L - Control Systems Engineering Laboratory</h3>
-              <h4>Prerequisites: ECE 3709 is corequisite</h4></button>
-        </div>
-
-
-
-        <div class = "column 6">
-            <button class = "classBox"><h3>ECE 3101L - Signals and Systems Laboratory</h3>
-              <h4>Prerequisites: ECE 3101</h4></button>
-            <button class = "classBox"><h3>ECE 3200L - Microelectronic Devices and Circuits Laboratory</h3>
-              <h4>Prerequisites: ECE 3200, ECE 2200L</h4></button>
-            <button class = "classBox"><h3>ECE 3715 - Probability, Statistics, and Random Processes for Electrical and Computer Engineers</h3>
-              <h4>Prerequisites: MAT 2140, ECE 3101</h4></button>
-            <button class = "classBox"><h3>ECE 3810 - Introduction to Power Engineering</h3>
-              <h4>Prerequisites: ECE 2101</h4></button>
-            <button class = "classBox"><h3>ECE 3810L - Introduction to Power Engineering Laboratory</h3>
-              <h4>Prerequisites: ECE 3810</h4></button>    
-        </div>
-        
-
-
-        <div class = "column 7">
-            <button class = "classBox"><h3>EGR 4810 - Project Design Principles and Applications</h3>
-              <h4>Prerequisites: ECE 3200, ECE 3101, Lower Division A and B</h4></button>
-            <button class = "classBox"><h3>EGR 4820 - Project Design Principles and Applications</h3>
-              <h4>Prerequisites: EGR 4810 is corequisite</h4></button>
-            <button class = "classBox"><h3>ECE 4064 - Professional Engineering Practice</h3>
-              <h4>Prerequisites: All lower division major courses</h4></button>
-            <button class = "classBox"><h3>ECE 4705 - Communication Systems</h3>
-              <h4>Prerequisites: ECE 3715</h4></button>
-            <button class = "classBox"><h3>ECE 4705L - Communication Systems Laboratory</h3>
-              <h4>Prerequisites: ECE 4705 is corequisite</h4></button>
-        </div>
-        <div class = "column 8">
-            <button class = "classBox"><h3>EGR 4830 - Project Design Principles and Applications</h3>
-              <h4>Prerequisites: EGR 4820</h4></button>
-            <!--<button class = "classBox">ClassBox</button>
-            //<button class = "classBox">ClassBox</button>-->
-        </div>
+    <div class="column 1">
+      <button class="classBox">
+        <h3>BIO 1110 - Life Science</h3>
+        <h4>Prerequisites: Undergraduate Standing</h4>
+      </button>
+      <button class="classBox">
+        <h3>CHM 1150 - General Chemistry for Engineers</h3>
+        <h4>Prerequisites: MAT 1050, or higher</h4>
+      </button>
+      <button class="classBox">
+        <h3>MAT 1140 - Calculus I</h3>
+        <h4>Prerequisites: Placement or MAT 1050, 1060, 1070</h4>
+      </button>
+      <button class="classBox">
+        <h3>PHY 1510 - Introduction to Newtonian Mechanics </h3>
+        <h4>Prerequisites: MAT 1140</h4>
+      </button>
+      <button class="classBox">
+        <h3>PHY 1510L - Introduction to Newtonian Mechanics Laboratory</h3>
+        <h4>Prerequisites: PHY 1510 is corequisite</h4>
+      </button>
     </div>
+
+    <div class="column 2">
+      <button class="classBox">
+        <h3>ECE 1101 - Electrical Circuit Analysis I</h3>
+        <h4>Prerequisites: MAT 1140</h4>
+      </button></button>
+      <button class="classBox">
+        <h3>ECE 1101L - Electrical Circuit Analysis Laboratory</h3>
+        <h4>Prerequisites: ECE 1101 is corequisite</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 1310 - C for Engineers</h3>
+        <h4>Prerequisites: MAT 1140</h4>
+      </button>
+      <button class="classBox">
+        <h3>MAT 1150 - Calculus II</h3>
+        <h4>Prerequisites: MAT 1140</h4>
+      </button>
+      <button class="classBox">
+        <h3>PHY 1520 - Introduction to Electricity and Magnetism</h3>
+        <h4>Prerequisites: MAT 1150, PHY 1510</h4>
+      </button>
+      <button class="classBox">
+        <h3>PHY 1520L - Introduction to Electricity and Magnetism Laboratory</h3>
+        <h4>Prerequisites: PHY 1520 is corequisite</h4>
+      </button>
+    </div>
+
+    <div class="column 3">
+      <button class="classBox">
+        <h3>ECE 2101 - Electrical Circuit Analysis II</h3>
+        <h4>Prerequisites: ECE 1101, ECE 1101L, PHY 1520, MAT 2240</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 2101L - Electrical Circuit Analysis II Laboratory</h3>
+        <h4>Prerequisites: ECE 2101 is corequisite</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 2200 - Introduction to Microelectronics Circuits</h3>
+        <h4>Prerequisites: CHM 1150 or CHM 1210, ECE 1101</h4>
+      </button>
+      <button class="classBox">
+        <h3>MAT 2140 - Calculus III</h3>
+        <h4>Prerequisites: MAT 1150</h4>
+      </button>
+
+    </div>
+
+    <div class="column 4">
+      <button class="classBox">
+        <h3>ECE 2200L - Introduction to Microelectronics Circuits Laboratory</h3>
+        <h4>Prerequisites: ECE 1101L, ECE 2200</h4>
+      </button>
+      <button class="classBox">
+        <h3>MAT 2240 - Elementary Linear Algebra and Differential Equations</h3>
+        <h4>Prerequisites: MAT 1150</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 2300 - Digital Logic Design</h3>
+        <h4>Prerequisites: ECE 1310, ECE 1101, ECE 1101L</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 2300L - Digital Logic Design Laboratory</h3>
+        <h4>Prerequisites: ECE 2300 is corequisite</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 2310 - Object Oriented Programming***</h3>
+        <h4>Prerequisites: ECE 1310</h4>
+      </button>
+    </div>
+
+    <div class="column 5">
+      <button class="classBox">
+        <h3>ECE 3101 - Signals and Systems</h3>
+        <h4>Prerequisites: ECE 2101</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3200 - Microelectronic Devices and Circuits</h3>
+        <h4>Prerequisites: ECE 2101, ECE 2200</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3250 - Electromagnetic Fields</h3>
+        <h4>Prerequisites: MAT 2140, MAT 2240, PHY 1520, ECE 2200</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3301 - Introduction to Microcontrollers</h3>
+        <h4>Prerequisites: ECE 2300</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3301L - Introduction to Microcontrollers Laboratory</h3>
+        <h4>Prerequisites: ECE 2300, ECE 2300L, ECE 3301 is corequisite</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3709 - Control Systems Engineering</h3>
+        <h4>Prerequisites: ECE 2101, MAT 2240</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3709L - Control Systems Engineering Laboratory</h3>
+        <h4>Prerequisites: ECE 3709 is corequisite</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 3201 - Instrumentation Systems (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 2200, PHY 1520</h4>
+      </button>
+    </div>
+
+    <div class="column 6">
+      <button class="classBox">
+        <h3>ECE 3101L - Signals and Systems Laboratory</h3>
+        <h4>Prerequisites: ECE 3101</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3200L - Microelectronic Devices and Circuits Laboratory</h3>
+        <h4>Prerequisites: ECE 3200, ECE 2200L</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3715 - Probability, Statistics, and Random Processes for Electrical and Computer Engineers</h3>
+        <h4>Prerequisites: MAT 2140, ECE 3101</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3810 - Introduction to Power Engineering</h3>
+        <h4>Prerequisites: ECE 2101</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 3810L - Introduction to Power Engineering Laboratory</h3>
+        <h4>Prerequisites: ECE 3810</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 3300 - Digital Circuit Design Using Verilog (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 2300, ECE 2300L</h4>
+      </button>
+        <button class="classBox elective">
+          <h3>ECE 3310 - Data Structures and Algorithms***</h3>
+          <h4>Prerequisites: ECE 2310</h4>
+        </button>
+    </div>
+
+    <div class="column 7">
+      <button class="classBox">
+        <h3>EGR 4810 - Project Design Principles and Applications</h3>
+        <h4>Prerequisites: ECE 3200, ECE 3101, Lower Division A and B</h4>
+      </button>
+      <button class="classBox">
+        <h3>EGR 4820 - Project Design Principles and Applications</h3>
+        <h4>Prerequisites: EGR 4810 is corequisite</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 4064 - Professional Engineering Practice</h3>
+        <h4>Prerequisites: All lower division major courses</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 4705 - Communication Systems</h3>
+        <h4>Prerequisites: ECE 3715</h4>
+      </button>
+      <button class="classBox">
+        <h3>ECE 4705L - Communication Systems Laboratory</h3>
+        <h4>Prerequisites: ECE 4705 is corequisite</h4>
+      </button>
+
+      <button class="classBox elective">
+        <h3>ECE 4200 - CMOS Analog Circuits (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 3200</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4201 - Advanced Analog Circuit Design (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 3200</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4203 - VLSI (Very Large Scale Integrated) Circuit Design (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 3200</h4>
+      </button>
+
+    </div>
+
+    <div class="column 8">
+      <button class="classBox">
+        <h3>EGR 4830 - Project Design Principles and Applications</h3>
+        <h4>Prerequisites: EGR 4810 is corequisite</h4>
+      </button>
+
+      <button class="classBox elective">
+        <h3>ECE 4250 - Fields and Waves in RF Electronics</h3>
+        <h4>Prerequisites: ECE 3250</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4251 - RF Design </h3>
+        <h4>Prerequisites: ECE 3250</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4252 - Integrated Circuit Design for Wireless Systems</h3>
+        <h4>Prerequisites: ECE 3200</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4260 - Introduction to Photonics</h3>
+        <h4>Prerequisites: ECE 3200, ECE 3250</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4300 - Computer Architecture</h3>
+        <h4>Prerequisites: ECE 3300, ECE 3300L, ECE 3301, ECE 3301L</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4301 - Cryptographic Algorithms on Reconfigurable Hardware</h3>
+        <h4>Prerequisites: ECE 3300, ECE 3300L</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4303 - TCP / IP Networking</h3>
+        <h4>Prerequisites: ECE 2310, ECE 3301, ECE 3301L, ECE 3300, ECE 3301L</h4>
+      </button>
+
+    </div>
+
+    <div class="column 9">
+      <button class="classBox elective">
+        <h3>ECE 4304 - Discrete System Design Using VHDL (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 3101, ECE 3300</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4305 - Advanced Digital Design Using VHDL (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 2310, ECE 3300, ECE 3300L, ECE 3301, ECE 3300L</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4309 - Fundamentals of Cybersecurity</h3>
+        <h4>Prerequisites: ECE 3310</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4310 - Operating Systems for Embedded Applications</h3>
+        <h4>Prerequisites: ECE 3310</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4311 - Network Forensics</h3>
+        <h4>Prerequisites: ECE 2310</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4317 - Intelligence Systems for Engineering</h3>
+        <h4>Prerequisites: ECE 3310, ECE 3715</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4318 - Software Engineering</h3>
+        <h4>Prerequisites: ECE 3310</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4319 - Application Development Using JAVA</h3>
+        <h4>Prerequisites: ECE 3310</h4>
+      </button>
+
+    </div>
+
+    <div class="column 10">
+      <button class="classBox elective">
+        <h3>ECE 4320 - Microprocessor-based System Design (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 3301, ECE 3301L</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4704 - Robotics</h3>
+        <h4>Prerequisites: ECE 3709, ECE 3709L</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4708 - Digital Signal Processing</h3>
+        <h4>Prerequisites: ECE 3101</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4709 - Digital Communications Systems</h3>
+        <h4>Prerequisites: ECE 4705</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4715 - Machine Learning</h3>
+        <h4>Prerequisites: ECE 3715</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4719 - Advanced Control Systems</h3>
+        <h4>Prerequisites: ECE 3709, ECE 3709L</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4735 - Biomedical Signals, Instrumentation, and Measurements</h3>
+        <h4>Prerequisites: ECE 3101</h4>
+      </button>
+    </div>
+
+    <div class="column 11">
+      <button class="classBox elective">
+        <h3>ECE 4821 - Power Transmission Lines (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 3810</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4822 - Power System Analysis (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 3810</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4868 - Power Systems Electronics (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 2200</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4869 - Power Electronics (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 2200</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4875 - Wind and Solar Power Systems</h3>
+        <h4>Prerequisites: ECE 3810</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4890 - Illumination Engineering (includes corequisite lab)</h3>
+        <h4>Prerequisites: ECE 2101, PHY 1520</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4990 - Special Topics for Upper Division Students</h3>
+        <h4>Prerequisites: Upper Division</h4>
+      </button>
+      <button class="classBox elective">
+        <h3>ECE 4990L - Special Topics for Upper Division Students Laboratory</h3>
+        <h4>Prerequisites: Upper Division</h4>
+      </button>
+    </div>
+
+  </div>
     
+  
+  <canvas id="myCanvas" width="2500" height="1600" style="border:1px solid black;"></canvas>
   <?!= include('JavaScript'); ?>
-  <canvas id="myCanvas" width="2500" height="1200" style="border:1px solid #d3d3d3;"></canvas>
 </body>
+
 </html>
