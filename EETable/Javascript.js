@@ -1,10 +1,10 @@
 
-<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+/*<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
 <!--function getContent(filename) {
     return HtmlService.createTemplateFromFile(filename).getRawContent();
 }-->
 
-//<script>
+//<script>*/
 //response.addHeader("Access-Control-Allow-Origin", "*");
 var canvas = document.getElementById('myCanvas');
 var canvasW = canvas.getBoundingClientRect().width;
