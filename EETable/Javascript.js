@@ -1,18 +1,25 @@
-/*<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
 <!--function getContent(filename) {
     return HtmlService.createTemplateFromFile(filename).getRawContent();
 }-->
 
-<script>*/
+//<script>
+//response.addHeader("Access-Control-Allow-Origin", "*");
+var canvas = document.getElementById('myCanvas');
+var canvasW = canvas.getBoundingClientRect().width;
+var canvasH = canvas.getBoundingClientRect().height;
+var ctx = canvas.getContext("2d");
 
-const canvasWidth = 2500;
-const canvasHeight = 1200;
 const box = document.getElementsByClassName("classBox");
-
-const originalText = [];
+const originalClassText = [];
 const className = [];
+
 const preRequisites = [];
 const boxClicked = [];
+var uniquePaths = [];
+var foundElements = [];
+let classFullNameRegex = /(?<=\>).*(?=\<)/;
 let classNameRegex = /(?<=\>).*(?=\s-)/;
 let preReqRegex = /(?<=Prerequisites:\s).+(?=\<)/;
 
@@ -20,29 +27,15 @@ let preReqRegex = /(?<=Prerequisites:\s).+(?=\<)/;
 for (let i = 0; i < box.length; i++)
   {
     var contents = box[i].innerHTML
-    originalText.push(contents);
     
- className.push(contents.match(classNameRegex));  
+    originalClassText.push(contents.match(classFullNameRegex));
+    
+    className.push(contents.match(classNameRegex));  
    
     let preReqs = contents.match(preReqRegex);
-    //console.log(preReqs);
-    //let preReqsArray = [preReqs[0].split(", ")];
     preRequisites.push(preReqs);
   }
-//console.log(originalText);
-//console.log(className);
-//console.log(preRequisites);
-/*console.log(className[0][0]);
-console.log(preRequisites[3][0]);
-let var1 = preRequisites[3][0];
-let var2 = className[0][0];
-console.log(typeof(var1));
-console.log(var1.includes(var2));*/
-/*function colorChange()
-{
-    box[i].style.backgroundColor = 'salmon';
-    box[i].style.color = 'white';
-}*/
+
 for (let i = 0; i < box.length; i++) {
   //console.log(box[i].innerHTML);
   //boxClicked.push(false);
@@ -55,50 +48,29 @@ for (let i = 0; i < box.length; i++) {
   if (x==0) 
   {
     box[i].classList.add("clicked");
-    console.log('added clicked class to element' + box[i]);
+    for(let j = 0; j < foundElements.length; j++)
+      {
+        box[foundElements[j]].classList.remove("found");
+      }
+    //console.log('added clicked class to element' + box[i]);
     x = 1;
   } 
     else 
   {
-    console.log('removed clicked class from element' + box[i]);
+    //console.log('removed clicked class from element' + box[i]);
     box[i].classList.remove("clicked");
+    
     //box[i].innerHTML = originalText[i];
     x = 0;
   }   
 });
-  /*box[i].addEventListener("click", function drawLines()
-  {
-    var canvas = document.querySelector('canvas'),
-    ctx = canvas.getContext('2d');
-    if(x==0)
-    {
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    }
-    else
-    {
-      for(let j = 0; j < box.length; j++)
-        {
-          //if(preRequisites[i][0] !== null && className[j][0] !== null)
-           {
-          let preReqs = preRequisites[i][0];
-          let name = className[j][0];
-          
-          if (preReqs.includes(name))
-            {
-              drawLineBetweenElements(box[i], box[j]);
-              //drawLines();
-            }
-           }
-        }
-    }
-  });*/
+  
   box[i].addEventListener("click", function drawLines()
   {
-    var canvas = document.querySelector('canvas'),
-    ctx = canvas.getContext('2d');
+    
     if(x==0)
     {
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      ctx.clearRect(0, 0, canvasW, canvasH);
       paths = [];
       pathRawValues = [];
       uniquePaths = [];
@@ -106,23 +78,27 @@ for (let i = 0; i < box.length; i++) {
         {
           box[o].classList.remove("hide");
           box[o].classList.remove("disabled");
+          box[i].classList.remove("found");
         }
     }
     else
     {
+      
       findPrereqPaths(i);
       uniquePaths = [...new Set(pathRawValues)];
+      uniquePaths.sort(function(a, b){return b-a});
       console.log(paths);
       console.log(uniquePaths);
+      updateSideBar(i);
       for (let k = 0; k < paths.length; k++)
         {
           drawLineBetweenElements(box[paths[k][0]], box[paths[k][1]]);
         }
       hideUnconnectedBoxes(uniquePaths);
-      if(uniquePaths.length == 0)
-      {
-        box[i].classList.remove("hide")
-      }
+      if (uniquePaths.length == 0)
+        {
+          box[i].classList.remove('hide');
+        }
       disableButtonsExceptParam(i);
     }
   });
@@ -159,24 +135,15 @@ function disableButtonsExceptParam(param)
   box[param].classList.remove("disabled");
   
 }
-/*function changeColor() {
-  var x = 0;
-  if (x == 0) {
-    box[i].classList.add("clicked");
-    x = 1;
-  } else {
-    box[i].classList.remove("clicked");
-    x = 0;
-  }
-}*/
 
-function getCenterOfElement(el) {
+
+/*function getCenterOfElement(el) {
     var bounds = el.getBoundingClientRect();
     //console.log("x:" + (bounds.left + bounds.width/2.0));
     //console.log("y:" + (bounds.left + bounds.width/2.0));
     return {x:bounds.left + bounds.width/2.0,
             y:bounds.top + bounds.height/2.0};
-}
+}*/
 
 function drawLineBetweenElements(a, b)
 {
@@ -184,12 +151,13 @@ function drawLineBetweenElements(a, b)
   let xCoords1 = getCoords(a).left + 75;
   let yCoords2 = getCoords(b).top - 25;
   let xCoords2 = getCoords(b).left + 75;
-  let c = document.getElementById("myCanvas");
-  let ctx = c.getContext("2d");
+  //console.log("(" + xCoords1 + "," + yCoords1 + ")")
+  var ctx = canvas.getContext("2d");
   ctx.beginPath();
   ctx.moveTo(xCoords1, yCoords1);
   ctx.lineTo(xCoords2, yCoords2);
   ctx.stroke();
+  //console.log("line drawn");
 }
 
 function getCoords(elem) 
@@ -247,5 +215,92 @@ function findPrereqPaths(classIndex)
       counter++;
     }
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("toggle").addEventListener("click", () => {
+    const sidebarEl = document.getElementsByClassName("sidebar")[0];
+    sidebarEl.classList.toggle("sidebar--isHidden");
+
+    document.getElementById("toggle").innerHTML = sidebarEl.classList.contains(
+      "sidebar--isHidden"
+    )
+      ? "Show Sidebar"
+      : "Hide Sidebar";
+  });
+});
+
+function updateSideBar(classIndex)
+{
+  let sidebarclassSelected = document.getElementsByClassName("classSelected");
+  let sidebarPrereqs = document.getElementsByClassName("prereqList");
+  sidebarclassSelected[0].textContent = className[classIndex];
+  //let indivPrereqs = preRequisites[classIndex][0].split(",");
+  sidebarPrereqs[0].textContent = ("---- Prequisites ---- ");
+  var addStr = "";
+  for(let i = 0; i < uniquePaths.length; i++)
+    {
+      if(uniquePaths[i] == classIndex)
+        {
+          continue;
+        }
+      addStr += "<br>" + className[uniquePaths[i]];
+    }
+  sidebarPrereqs[0].innerHTML = ("--All Prequisites-- " + addStr);
+  //preRequisites[classIndex][0]
+  
+}
+/*let sidebarclassSelected = document.getElementsByClassName("classSelected");
+console.log(sidebarclassSelected[0].textContent);
+console.log(className[0]);
+console.log(sidebarclassSelected[0].textContent = className[0]);*/
+//console.log(preRequisites[11][0].split(","));
+//console.log(document.getElementsByClassName("prereqList").[0].innerHTML = "---- Prequisites ---- " + "<ul>hi</ul>");
+//drawLineBetweenElements(box[0], box[1];
+
+//search
+
+var searchValue = document.getElementById("class-search").value;
+
+var searchButton = document.getElementById('searchButton');
+searchButton.addEventListener("click", function drawLines()
+{
+  var searchValue = document.getElementById("class-search").value;
+  findAndHighlight(searchValue);
+});
+
+                              
+function findAndHighlight(searchValue)
+{
+  if(searchValue.length > 3)
+    {
+  //console.log("Searching for: " + searchValue);
+  var foundAny = false;
+  var foundStr = ("The following classes matching \"" + searchValue + "\" were found: ");
+  for(let i = 0; i < originalClassText.length; i++)
+    {
+      
+      if(originalClassText[i][0].includes(searchValue))
+       {
+         box[i].classList.add("found");
+         foundElements.push(i);
+         foundStr += className[i] + " ";
+         foundAny = true;
+       }
+    }
+  if (!foundAny)
+    {
+      alert("No matching queries found");
+    }
+  else
+    {
+      alert(foundStr);
+    }
+    }
+    else
+      {
+        alert("Invalid Search");
+      }
+}
+
 //</script>
 
