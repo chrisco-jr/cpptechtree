@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -13,28 +12,37 @@
 </head>
 
 <body>
-  <div class="search">
-    <label for="class-search">Search for Class or Code <em>(4 Character Minimum)</em>: </label>
-    <input type="search" id="class-search" name="q">
+  <div class="tools" id='tools'>
+    <div class="search">
+      <label for="class-search">Search for Class or Code <em>(4 Character Minimum)</em>: </label>
+      <input type="search" id="class-search" name="q">
 
-    <button class="search" id="searchButton">Search</button>
-  </div>
-  <!--SIDEBAR WIP-->
-  <div style=float: right>
-    <div class="sidebar">
-      <div class="sidebarList">
-        <h1 class="classSelected">No Class Selected</h1>
-          <div class = "prereqItems">
-            <h2 class="prereqList">No Prerequisites</h2>
-          </div>
-      </div>
+      <button class="search" id="searchButton">Search</button>
+      <br>
+
     </div>
+    <div id='zooms'>
+      <button id="zoomIn">+</button>
+      <button id="zoomOut">-</button>
+    </div>
+  </div>
 
+  <br>
+  <div class="content">
     <button class="sidebarbtn" id="toggle">Show Sidebar</button>
 
-  </div>
+    <!--SIDEBAR WIP-->
+    <div style=float: right>
+      <div class="sidebar">
+        <div class="sidebarList">
+          <h1 class="classSelected">No Class Selected</h1>
+          <div class="prereqItems">
+            <h2 class="prereqList">No Prerequisites</h2>
+          </div>
+        </div>
+      </div>
   
-  <div class="mainGrid">
+  <div class="mainGrid" id='mainGrid'>
     <div class="column 1">
       <button class="classBox">
         <h3>BIO 1110 - Life Science</h3>
@@ -373,7 +381,7 @@
   </div>
     
   
-  <canvas id="myCanvas" width="2500" height="1600" style="border:1px solid black;"></canvas>
+  <canvas id="myCanvas" width="3000" height="1600" style="border:1px solid black;"></canvas>
   <?!= include('JavaScript'); ?>
 </body>
 
