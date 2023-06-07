@@ -4,26 +4,32 @@
     return HtmlService.createTemplateFromFile(filename).getRawContent();
 }-->
 
-//<script>*/
-//response.addHeader("Access-Control-Allow-Origin", "*");
-var canvas = document.getElementById('myCanvas');
-var canvasW = canvas.getBoundingClientRect().width;
-var canvasH = canvas.getBoundingClientRect().height;
-var ctx = canvas.getContext("2d");
+<script>*/
+//Initializations for variables
+//Constants for canvas elements
+const canvas = document.getElementById('myCanvas');
+const canvasW = canvas.getBoundingClientRect().width;
+const canvasH = canvas.getBoundingClientRect().height;
+const ctx = canvas.getContext("2d");
 
+//Constants for Class Information
 const box = document.getElementsByClassName("classBox");
 const originalClassText = [];
 const className = [];
-
 const preRequisites = [];
 const boxClicked = [];
+
+//Variables for uniqueP
 var uniquePaths = [];
 var foundElements = [];
-let classFullNameRegex = /(?<=\>).*(?=\<)/;
-let classNameRegex = /(?<=\>).*(?=\s-)/;
-let preReqRegex = /(?<=Prerequisites:\s).+(?=\<)/;
+
+//Constants for Regexes Used
+const classFullNameRegex = /(?<=\>).*(?=\<)/;
+const classNameRegex = /(?<=\>).*(?=\s-)/;
+const preReqRegex = /(?<=Prerequisites:\s).+(?=\<)/;
 
 
+//Iterates through available classes, fills in class name and prereq info to arrays
 for (let i = 0; i < box.length; i++)
   {
     var contents = box[i].innerHTML
@@ -36,12 +42,9 @@ for (let i = 0; i < box.length; i++)
     preRequisites.push(preReqs);
   }
 
+//Iterates through classBoxes, adds and applites event listeners to update appearance of boxes, lines, colors, etc.
 for (let i = 0; i < box.length; i++) {
-  //console.log(box[i].innerHTML);
-  //boxClicked.push(false);
-  //console.log(box[i].classList);
   var x = 0;
-  
   box[i].addEventListener("click", function changeColor() {
    //box[i].innerHTML = "boo";
    
@@ -50,7 +53,8 @@ for (let i = 0; i < box.length; i++) {
     box[i].classList.add("clicked");
     for(let j = 0; j < foundElements.length; j++)
       {
-        box[foundElements[j]].classList.remove("found");
+       box[foundElements[j]].classList.remove("found"); 
+       box[foundElements[j]].classList.remove("currentSearch");
       }
     //console.log('added clicked class to element' + box[i]);
     x = 1;
@@ -83,12 +87,21 @@ for (let i = 0; i < box.length; i++) {
     }
     else
     {
+      if (zoom != 1)
+        {
+          zoom = 1;
+          document.getElementById("mainGrid").style.transform = "scale(" + zoom + ")";
+          document.getElementById("myCanvas").style.transform = "scale(" + zoom + ")";
+          let yCoords = getCoords(box[i]).top - window.innerHeight / 2;
+          let xCoords = getCoords(box[i]).left - window.innerWidth / 2;
+          window.scrollTo(xCoords, yCoords);
+        }
       
       findPrereqPaths(i);
       uniquePaths = [...new Set(pathRawValues)];
       uniquePaths.sort(function(a, b){return b-a});
-      console.log(paths);
-      console.log(uniquePaths);
+      //console.log(paths);
+      //console.log(uniquePaths);
       updateSideBar(i);
       for (let k = 0; k < paths.length; k++)
         {
@@ -137,21 +150,14 @@ function disableButtonsExceptParam(param)
 }
 
 
-/*function getCenterOfElement(el) {
-    var bounds = el.getBoundingClientRect();
-    //console.log("x:" + (bounds.left + bounds.width/2.0));
-    //console.log("y:" + (bounds.left + bounds.width/2.0));
-    return {x:bounds.left + bounds.width/2.0,
-            y:bounds.top + bounds.height/2.0};
-}*/
-
 function drawLineBetweenElements(a, b)
 {
-  let yCoords1 = getCoords(a).top - 25;
+  let yCoords1 = getCoords(a).top - 0;
   let xCoords1 = getCoords(a).left + 75;
-  let yCoords2 = getCoords(b).top - 25;
+  let yCoords2 = getCoords(b).top - 0;
   let xCoords2 = getCoords(b).left + 75;
   //console.log("(" + xCoords1 + "," + yCoords1 + ")")
+  
   var ctx = canvas.getContext("2d");
   ctx.beginPath();
   ctx.moveTo(xCoords1, yCoords1);
@@ -235,7 +241,7 @@ function updateSideBar(classIndex)
   let sidebarPrereqs = document.getElementsByClassName("prereqList");
   sidebarclassSelected[0].textContent = className[classIndex];
   //let indivPrereqs = preRequisites[classIndex][0].split(",");
-  sidebarPrereqs[0].textContent = ("---- Prequisites ---- ");
+  //sidebarPrereqs[0].textContent = ("---- Prequisites ---- ");
   var addStr = "";
   for(let i = 0; i < uniquePaths.length; i++)
     {
@@ -247,8 +253,55 @@ function updateSideBar(classIndex)
     }
   sidebarPrereqs[0].innerHTML = ("--All Prequisites-- " + addStr);
   //preRequisites[classIndex][0]
-  
 }
+
+function updateFoundSideBar(searchValue)
+{
+  foundElements.sort(function(a, b){return a-b});
+  foundElements = [...new Set(foundElements)];
+  console.log(foundElements);
+  let sidebarclassSelected = document.getElementsByClassName("classSelected");
+  let sidebarPrereqs = document.getElementsByClassName("prereqList");
+  sidebarclassSelected[0].textContent = "Search for: " + searchValue;
+  //let indivPrereqs = preRequisites[classIndex][0].split(",");
+  sidebarPrereqs[0].textContent = ("---- Classes Found ---- ");
+  var addStr = "";
+  for(let i = 0; i < foundElements.length; i++)
+    {
+      
+      addStr += "<br><button class=\"foundbtn\" id=\"preReqBtn" + foundElements[i] + "\">" + className[foundElements[i]] + "</button>";
+      
+      
+    }
+  sidebarPrereqs[0].innerHTML = ("--Classes Found--<br>" + addStr);
+  var activeSelection;
+  for (let i = 0; i < foundElements.length; i++)
+  {
+      let preReqBtn = document.getElementById("preReqBtn" + foundElements[i]);
+      preReqBtn.addEventListener("click", function(){
+          if(activeSelection != null)
+            {
+              box[activeSelection].classList.remove("currentSearch");
+          
+            }
+          activeSelection = foundElements[i];
+          
+          var yCoordsFocus = getCoords(box[activeSelection]).top - window.innerHeight / 2;
+          var xCoordsFocus = getCoords(box[activeSelection]).left - window.innerWidth / 2;
+          //console.log("Scrolling to: " + xCoordsFocus + ", " + yCoordsFocus);
+          window.scrollTo(xCoordsFocus, yCoordsFocus);
+          
+          box[activeSelection].classList.add("currentSearch");
+         
+      });
+  }
+}
+
+//foundElements = [0, 50, 60, 2]
+//console.log("<br><button class=\"foundbtn\" id=\"preReqBtn" + foundElements[3] + "\">");
+//let preReqBtn = document.getElementById("preReqBtn" + foundElements[3]);
+//console.log("preReqBtn" + foundElements[3]);
+
 /*let sidebarclassSelected = document.getElementsByClassName("classSelected");
 console.log(sidebarclassSelected[0].textContent);
 console.log(className[0]);
@@ -271,6 +324,11 @@ searchButton.addEventListener("click", function drawLines()
                               
 function findAndHighlight(searchValue)
 {
+  for(let j = 0; j < foundElements.length; j++)
+      {
+        box[foundElements[j]].classList.remove("found");
+      }
+  foundElements = [];
   if(searchValue.length > 3)
     {
   //console.log("Searching for: " + searchValue);
@@ -279,7 +337,7 @@ function findAndHighlight(searchValue)
   for(let i = 0; i < originalClassText.length; i++)
     {
       
-      if(originalClassText[i][0].includes(searchValue))
+      if(originalClassText[i][0].toLowerCase().includes(searchValue.toLowerCase()))
        {
          box[i].classList.add("found");
          foundElements.push(i);
@@ -293,7 +351,8 @@ function findAndHighlight(searchValue)
     }
   else
     {
-      alert(foundStr);
+      //alert(foundStr);
+      updateFoundSideBar(searchValue);
     }
     }
     else
@@ -302,5 +361,95 @@ function findAndHighlight(searchValue)
       }
 }
 
+//Drag to scroll
+let pos = { x: 0, y: 0, scrollX: 0, scrollY: 0 };
+window.addEventListener("mousedown", mouseDownHandler)
+
+function mouseDownHandler()
+{
+  pos =
+  {
+    scrollX: window.pageXOffset,
+    scrollY: window.pageYOffset,
+    x: event.clientX,
+    y: event.clientY
+  };
+  document.getElementById('mainGrid').style.cursor = 'grabbing';
+  document.getElementById('tools').style.cursor = 'grabbing';
+  document.getElementById('mainGrid').style.userSelect = 'none';
+  document.getElementById('tools').style.userSelect = 'none';
+  //console.log("you have clicked at point: (" + pos.x + ", " + pos.y + ") Scroll position is " + pos.scrollX + ", " + pos.scrollY);
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
+}
+
+function mouseMoveHandler()
+{
+  const dx = event.clientX - pos.x;
+  const dy = event.clientY - pos.y;
+  
+  //Scroll element
+  
+  //window.pageXOffset = pos.scrollX - dx;
+  //window.pageYOffset = pos.scrollY - dy;
+  window.scrollTo(pos.scrollX - dx * 1.5, pos.scrollY - dy * 1.5);
+}
+
+function mouseUpHandler()
+{
+  document.removeEventListener('mousemove', mouseMoveHandler);
+  document.removeEventListener('mouseup', mouseUpHandler);
+  document.getElementById('mainGrid').style.cursor = 'default';
+}
+
+
+//Zoom in and out
+var zoom = 1;
+var minZoom = 0.6;
+var maxZoom = 1.4;
+var zoomStep = 0.2;
+
+document.getElementById("zoomIn").addEventListener("click", function() {
+  if(zoom < maxZoom)
+    {
+      zoom += zoomStep;
+      document.getElementById("mainGrid").style.transform = "scale(" + zoom + ")";
+      document.getElementById("myCanvas").style.transform = "scale(" + zoom + ")";
+      zoomFocus();
+    }
+  
+    });
+    
+document.getElementById("zoomOut").addEventListener("click", function() {
+      console.log(zoom + " > " + minZoom + " = " + (zoom > minZoom));
+      if (zoom > minZoom) 
+      {
+        zoom -= zoomStep;
+        document.getElementById("mainGrid").style.transform = "scale(" + zoom + ")";
+        document.getElementById("myCanvas").style.transform = "scale(" + zoom + ")";
+        zoomFocus();
+      }
+    
+    });
+
+document.getElementById("mainGrid").style.transform = "scale(" + 1 + ")";
+
+function zoomFocus()
+{
+  for(let i = 0; i < box.length; i++)
+    {
+      if (box[i].classList.contains("clicked"))
+        {
+          var yCoordsFocus = getCoords(box[i]).top - window.innerHeight / 2;
+          var xCoordsFocus = getCoords(box[i]).left - window.innerWidth / 2;
+          //console.log("Scrolling to: " + xCoordsFocus + ", " + yCoordsFocus);
+          window.scrollTo(xCoordsFocus, yCoordsFocus);
+          break;
+        } 
+    } 
+}
+//console.log(box[1].classList.add("clicked"));
+//console.log(box[1].classList);
+//console.log(box[1].classList.contains("clicked"));
 //</script>
 
