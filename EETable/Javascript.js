@@ -157,13 +157,32 @@ function drawLineBetweenElements(a, b)
   let yCoords2 = getCoords(b).top - 0;
   let xCoords2 = getCoords(b).left + 75;
   //console.log("(" + xCoords1 + "," + yCoords1 + ")")
+  let midwayX = (xCoords1 + xCoords2)/2;
+  let midwayY = (yCoords1 + yCoords2)/2;
   
   var ctx = canvas.getContext("2d");
   ctx.beginPath();
   ctx.moveTo(xCoords1, yCoords1);
-  ctx.lineTo(xCoords2, yCoords2);
+  ctx.lineTo(midwayX, midwayY);
   ctx.stroke();
+  
+  //Arrowheads
+  canvasArrow(ctx, xCoords2, yCoords2, midwayX, midwayY);
+  ctx.stroke();
+  
   //console.log("line drawn");
+}
+
+function canvasArrow(context, fromx, fromy, tox, toy) {
+  var headlen = 7; // length of head in pixels
+  var dx = tox - fromx;
+  var dy = toy - fromy;
+  var angle = Math.atan2(dy, dx);
+  context.moveTo(fromx, fromy);
+  context.lineTo(tox, toy);
+  context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+  context.moveTo(tox, toy);
+  context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
 }
 
 function getCoords(elem) 
@@ -297,18 +316,6 @@ function updateFoundSideBar(searchValue)
   }
 }
 
-//foundElements = [0, 50, 60, 2]
-//console.log("<br><button class=\"foundbtn\" id=\"preReqBtn" + foundElements[3] + "\">");
-//let preReqBtn = document.getElementById("preReqBtn" + foundElements[3]);
-//console.log("preReqBtn" + foundElements[3]);
-
-/*let sidebarclassSelected = document.getElementsByClassName("classSelected");
-console.log(sidebarclassSelected[0].textContent);
-console.log(className[0]);
-console.log(sidebarclassSelected[0].textContent = className[0]);*/
-//console.log(preRequisites[11][0].split(","));
-//console.log(document.getElementsByClassName("prereqList").[0].innerHTML = "---- Prequisites ---- " + "<ul>hi</ul>");
-//drawLineBetweenElements(box[0], box[1];
 
 //search
 
@@ -327,7 +334,15 @@ function findAndHighlight(searchValue)
   for(let j = 0; j < foundElements.length; j++)
       {
         box[foundElements[j]].classList.remove("found");
+        box[foundElements[j]].classList.remove("currentSearch");
       }
+  for(let i = 0; i < originalClassText.length; i++)
+    {
+      if (box[i].classList.contains("clicked"))
+        {
+          box[i].click();
+        }
+    }
   foundElements = [];
   if(searchValue.length > 3)
     {
