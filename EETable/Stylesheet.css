@@ -229,7 +229,7 @@ h4 {
   .sidebar {
     border-left: 2px solid black;
 
-    width: 5rem;
+    width: 6rem;
 
     z-index: 1;
   }
@@ -254,6 +254,16 @@ h4 {
   {
     width: 50%;
   }
+  .classSelected
+  {
+    font-size: 12px;
+  }
+  .foundbtn
+  {
+    font-size: 8px;
+    width: 80%;
+    height: 1.3rem;
+  }
   #class-search
   {
     width: 150px;
@@ -267,7 +277,6 @@ h4 {
     flex-direction: column;
   }
 }
-
 /*</style>*/
 
 
