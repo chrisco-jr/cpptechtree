@@ -5,6 +5,13 @@
 }-->
 
 <script>*/
+
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+<!--function getContent(filename) {
+    return HtmlService.createTemplateFromFile(filename).getRawContent();
+}-->
+
+<script>
 //Initializations for variables
 //Constants for canvas elements
 const canvas = document.getElementById('myCanvas');
@@ -19,9 +26,13 @@ const className = [];
 const preRequisites = [];
 const boxClicked = [];
 
-//Variables for uniqueP
+//Variables for paths and elements
 var uniquePaths = [];
 var foundElements = [];
+var futurePaths = [];
+var futurePathRawValues = [];
+var uniqueFuturePaths = [];
+var depth = 1;
 
 //Constants for Regexes Used
 const classFullNameRegex = /(?<=\>).*(?=\<)/;
@@ -42,42 +53,42 @@ for (let i = 0; i < box.length; i++)
     preRequisites.push(preReqs);
   }
 
-//Iterates through classBoxes, adds and applites event listeners to update appearance of boxes, lines, colors, etc.
+//Iterates through classBoxes, adds and applies event listeners to update appearance of boxes, lines, colors, etc.
 for (let i = 0; i < box.length; i++) {
   var x = 0;
   box[i].addEventListener("click", function changeColor() {
-   //box[i].innerHTML = "boo";
-   
   if (x==0) 
   {
+    //Updates CSS style when clicked
     box[i].classList.add("clicked");
+    //Clears CSS formatting of boxes applied after a search
     for(let j = 0; j < foundElements.length; j++)
       {
        box[foundElements[j]].classList.remove("found"); 
        box[foundElements[j]].classList.remove("currentSearch");
       }
-    //console.log('added clicked class to element' + box[i]);
     x = 1;
   } 
     else 
   {
-    //console.log('removed clicked class from element' + box[i]);
+    //Updates CSS style when box clicked again
     box[i].classList.remove("clicked");
-    
-    //box[i].innerHTML = originalText[i];
     x = 0;
   }   
 });
-  
+
   box[i].addEventListener("click", function drawLines()
   {
-    
+    //When classBox is unselected, clears all lines and resets paths and CSS styles applied
     if(x==0)
     {
       ctx.clearRect(0, 0, canvasW, canvasH);
       paths = [];
       pathRawValues = [];
       uniquePaths = [];
+      futurePaths = [];
+      futurePathRawValues = [];
+      uniqueFuturePaths = [];
       for (let o = 0; o < box.length; o++)
         {
           box[o].classList.remove("hide");
@@ -85,8 +96,9 @@ for (let i = 0; i < box.length; i++) {
           box[i].classList.remove("found");
         }
     }
-    else
+    else //When classBox is clicked
     {
+      //Checks if zoom is nonstandard, sets to standard amount when classBox is selected
       if (zoom != 1)
         {
           zoom = 1;
@@ -97,17 +109,28 @@ for (let i = 0; i < box.length; i++) {
           window.scrollTo(xCoords, yCoords);
         }
       
+      //Updates all paths/element values
       findPrereqPaths(i);
+      findFuturePaths(i, depth);
       uniquePaths = [...new Set(pathRawValues)];
       uniquePaths.sort(function(a, b){return b-a});
-      //console.log(paths);
-      //console.log(uniquePaths);
+      uniqueFuturePaths = [...new Set(futurePathRawValues)];
+      uniqueFuturePaths.sort(function(a, b){return a-b});
+  
       updateSideBar(i);
+      
+      //Draws Lines for prereqs and futureReqs
       for (let k = 0; k < paths.length; k++)
         {
-          drawLineBetweenElements(box[paths[k][0]], box[paths[k][1]]);
+          drawLineBetweenElements(box[paths[k][0]], box[paths[k][1]], false);
+          
         }
-      hideUnconnectedBoxes(uniquePaths);
+      for (let k = 0; k < futurePaths.length; k++)
+        {
+          drawLineBetweenElements(box[futurePaths[k][1]], box[futurePaths[k][0]], true);
+        }
+      //Updates CSS styles for all irrelevant classBoxes
+      hideUnconnectedBoxes(uniquePaths, uniqueFuturePaths);
       if (uniquePaths.length == 0)
         {
           box[i].classList.remove('hide');
@@ -117,16 +140,22 @@ for (let i = 0; i < box.length; i++) {
   });
 }
 
-function hideUnconnectedBoxes(uniquePaths)
+//Iterates through all boxes, if not within a Prerequisite Path hides irrelevant classes
+function hideUnconnectedBoxes(uniquePaths, uniqueFuturePaths)
 {
   for(let i = 0; i < box.length; i++)
     {
       var hideFlag = true;
       for(let j = 0; j < uniquePaths.length; j++)
       {
-        //console.log("" + i + " != " + uniquePaths[j] +  " = " +  (i != uniquePaths[j]));
-        
         if(i == uniquePaths[j])
+          {
+            hideFlag = false;
+          }
+      }
+      for(let j = 0; j < uniqueFuturePaths.length; j++)
+      {
+        if(i == uniqueFuturePaths[j])
           {
             hideFlag = false;
           }
@@ -139,6 +168,7 @@ function hideUnconnectedBoxes(uniquePaths)
     }
 }
 
+//Disables ability to click all other Classboxes when one is selected
 function disableButtonsExceptParam(param)
 {
   for (let i = 0; i < box.length; i++)
@@ -149,8 +179,8 @@ function disableButtonsExceptParam(param)
   
 }
 
-
-function drawLineBetweenElements(a, b)
+//Draws either solid or dashed lines between two boxes 'a' and 'b'
+function drawLineBetweenElements(a, b, isDashed)
 {
   let yCoords1 = getCoords(a).top - 0;
   let xCoords1 = getCoords(a).left + 75;
@@ -161,30 +191,45 @@ function drawLineBetweenElements(a, b)
   let midwayY = (yCoords1 + yCoords2)/2;
   
   var ctx = canvas.getContext("2d");
+  
+  
   ctx.beginPath();
-  ctx.moveTo(xCoords1, yCoords1);
-  ctx.lineTo(midwayX, midwayY);
-  ctx.stroke();
-  
-  //Arrowheads
-  canvasArrow(ctx, xCoords2, yCoords2, midwayX, midwayY);
-  ctx.stroke();
-  
-  //console.log("line drawn");
+  if (isDashed)
+    {
+      
+      ctx.setLineDash([5, 15]);
+      ctx.moveTo(xCoords1, yCoords1);
+      ctx.lineTo(xCoords2, yCoords2);
+      ctx.stroke();
+    }
+  else
+    {
+      ctx.setLineDash([]);
+      canvasArrow(ctx, xCoords2, yCoords2, midwayX, midwayY, isDashed);
+      ctx.stroke();
+      ctx.moveTo(xCoords1, yCoords1);
+      ctx.lineTo(midwayX, midwayY);
+      ctx.stroke();
+    }
 }
 
-function canvasArrow(context, fromx, fromy, tox, toy) {
-  var headlen = 7; // length of head in pixels
+//for solid lines only, implements an arrowhead to better indicate flow
+function canvasArrow(context, fromx, fromy, tox, toy, isDashed) {
+  
+  var headlen = 8; // length of head in pixels
   var dx = tox - fromx;
   var dy = toy - fromy;
   var angle = Math.atan2(dy, dx);
+  
   context.moveTo(fromx, fromy);
   context.lineTo(tox, toy);
+  
   context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
   context.moveTo(tox, toy);
   context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
 }
 
+//Helper Function to get coordinates of a classbox
 function getCoords(elem) 
 {
     var box = elem.getBoundingClientRect();
@@ -203,44 +248,61 @@ function getCoords(elem)
 
     return { top: Math.round(top), left: Math.round(left) };
 }
-//drawLineBetweenElements(box[1], box[2]);
+
 
 let paths = [];
 let pathRawValues = [];
 
-
-//console.log(className[5][0]);
-//console.log(box.length);
-//findPrereqPaths(3);
-//let uniquePaths = [...new Set(pathRawValues)];
-//console.log("Paths: " + paths);
-//console.log("Unique Paths: " + uniquePaths);
+//Helper function to determine all prerequisites and prerequisites of prerequisites for a given classIndex
 function findPrereqPaths(classIndex)
 {
   var counter = 0;
   while(counter < box.length)
     {
-      //console.log("counter for classIndex " + classIndex + ": " + counter);
-      //if(preRequisites[classIndex][0] !== 0 && className[counter][0] !== 0)
-      //{
       let preReqs = preRequisites[classIndex][0];
       let name = className[counter][0];
+      //if a valid prerequisite is found, updates all lists
       if (preReqs.includes(name))
             {
               let addPaths = [classIndex, counter];
               paths.push(addPaths);
-              //console.log("Unique Paths: " + uniquePaths);
+
               pathRawValues.push(classIndex);
               pathRawValues.push(counter);
               findPrereqPaths(counter);
-              //drawLineBetweenElements(box[i], box[j]);
-              //drawLines();
             }
-      //}
       counter++;
     }
 }
 
+
+//Helper function to determine all future requisite classes for a classIndex at a given depth
+function findFuturePaths(classIndex, depth)
+{
+ 
+  for (let i = 0; i < depth; i++)
+    {
+      var counter = 0;
+      while(counter < box.length)
+        {
+          let futureReqs = preRequisites[counter][0];
+          let name = className[classIndex][0];
+          if (futureReqs.includes(name))
+            {
+              let addPaths = [classIndex, counter];
+              futurePaths.push(addPaths);
+
+              futurePathRawValues.push(classIndex);
+              futurePathRawValues.push(counter);
+              findFuturePaths(counter, depth - 1);
+             }
+      counter++;
+    }
+    }
+  
+}
+
+//Sets Sidebar toggle behaviors
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("toggle").addEventListener("click", () => {
     const sidebarEl = document.getElementsByClassName("sidebar")[0];
@@ -254,13 +316,28 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+//Sets Legend/Key toggle behaviors
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("toggle2").addEventListener("click", () => {
+    const keyEl = document.getElementsByClassName("legend")[0];
+    keyEl.classList.toggle("legend--isHidden");
+
+    document.getElementById("toggle2").innerHTML = keyEl.classList.contains(
+      "legend--isHidden"
+    )
+      ? "Show Key"
+      : "Hide Key";
+  });
+});
+
+//Helper function that updates internal CSS of sidebar to display information for a selected Class Index
 function updateSideBar(classIndex)
 {
   let sidebarclassSelected = document.getElementsByClassName("classSelected");
   let sidebarPrereqs = document.getElementsByClassName("prereqList");
   sidebarclassSelected[0].textContent = className[classIndex];
   //let indivPrereqs = preRequisites[classIndex][0].split(",");
-  //sidebarPrereqs[0].textContent = ("---- Prequisites ---- ");
+  sidebarPrereqs[0].textContent = ("---- Prequisites ---- ");
   var addStr = "";
   for(let i = 0; i < uniquePaths.length; i++)
     {
@@ -270,10 +347,30 @@ function updateSideBar(classIndex)
         }
       addStr += "<br>" + className[uniquePaths[i]];
     }
-  sidebarPrereqs[0].innerHTML = ("--All Prequisites-- " + addStr);
+  if (addStr == "")
+    {
+      addStr  += "<br>See Class Information";
+    }
+  sidebarPrereqs[0].innerHTML = ("-All Classes Needed-" + addStr);
   //preRequisites[classIndex][0]
+  addStr = "";
+  for(let i = 0; i < uniqueFuturePaths.length; i++)
+  
+  {
+      if(uniqueFuturePaths[i] == classIndex)
+        {
+          continue;
+        }
+      addStr += "<br>" + className[uniqueFuturePaths[i]];
+    }
+    if (addStr == "")
+    {
+      addStr  += "<br>None Found";
+    }
+  sidebarPrereqs[0].innerHTML = (sidebarPrereqs[0].innerHTML += "<br><br>--Prerequisite for-- " + addStr);
 }
 
+//Updates Sidebar to display buttons corresponding for any found searches of classes
 function updateFoundSideBar(searchValue)
 {
   foundElements.sort(function(a, b){return a-b});
@@ -282,14 +379,13 @@ function updateFoundSideBar(searchValue)
   let sidebarclassSelected = document.getElementsByClassName("classSelected");
   let sidebarPrereqs = document.getElementsByClassName("prereqList");
   sidebarclassSelected[0].textContent = "Search for: " + searchValue;
-  //let indivPrereqs = preRequisites[classIndex][0].split(",");
+
   sidebarPrereqs[0].textContent = ("---- Classes Found ---- ");
   var addStr = "";
   for(let i = 0; i < foundElements.length; i++)
     {
       
       addStr += "<br><button class=\"foundbtn\" id=\"preReqBtn" + foundElements[i] + "\">" + className[foundElements[i]] + "</button>";
-      
       
     }
   sidebarPrereqs[0].innerHTML = ("--Classes Found--<br>" + addStr);
@@ -315,7 +411,6 @@ function updateFoundSideBar(searchValue)
       });
   }
 }
-
 
 //search
 
@@ -463,8 +558,6 @@ function zoomFocus()
         } 
     } 
 }
-//console.log(box[1].classList.add("clicked"));
-//console.log(box[1].classList);
-//console.log(box[1].classList.contains("clicked"));
+
 //</script>
 
