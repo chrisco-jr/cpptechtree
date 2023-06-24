@@ -124,7 +124,9 @@ h4 {
 }
 .prereqList {
   text-align: center;
-
+  
+  word-wrap: break-word; 
+  white-space: nowrap;
   max-width: 12rem;
   width: 80%;
 }
@@ -144,6 +146,8 @@ h4 {
   height: 10rem;
   text-align: center;
   margin-top: 2rem;
+  margin-left: -0.3rem;
+  
   border-radius: 20% 5% 20% 5%;
   background-color: var(--bluelighter);
   color: #eeffff;
@@ -152,6 +156,12 @@ h4 {
 .sidebarbtn:hover {
   background-color: #24878f;
 }
+
+
+
+
+
+
 .search {
   position: absolute;
 }
@@ -168,7 +178,7 @@ h4 {
   background-color: white;
   position: fixed;
   display: inline-block;
-  width: 600px;
+  width: 37rem;;
   padding-top: 10px;
   padding-bottom: 5px;
   padding-left: 5px;
@@ -176,8 +186,61 @@ h4 {
   height: 1.2rem;
   left: 0;
   z-index: 1;
-  border-radius: 0% 0% 10% 0%;
+  border-radius: 0% 0% 0% 0%;
 }
+
+.legend--isHidden {
+  transform: translateY(+20rem);
+  transition: transform 200ms ease-out;
+}
+.legend
+{
+  position: fixed;
+  bottom: 0;
+  margin: 5% 0% 0% 0%;
+  transition: transform 200ms ease-in;
+  width: 15%;
+  height: 30%;
+  background-color: white;
+  z-index: 2;
+  border: 2px solid black;
+}
+.legendKey
+{
+  display: inline;
+}
+.legendTitle
+{
+  text-align: center;
+  margin: 1rem 0 0 0;
+  font-size: 1.5rem;
+}
+.legendKey > h2
+{
+  font-size: 0.9rem;
+  margin-top: -1.4rem;
+  margin-left: 5rem;
+  text-align: left;
+}
+.color1, .color2
+{
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid black;
+  margin-left: 2rem;
+}
+.color1
+{
+  background-color: var(--classBox); 
+}
+
+.color2
+{
+  border: dotted;
+  background-color: var(--classBoxE); 
+}
+
+
 #zooms {
   background-color: transparent;
   background-color: yellow;
@@ -264,6 +327,25 @@ h4 {
     width: 80%;
     height: 1.3rem;
   }
+  .legendKey > h2
+  {
+    font-size: 0.5rem;
+    margin-top: -1.2rem;
+    margin-left: 2rem;
+  }
+  .color1, .color2
+  {
+    width: 1rem;
+    height: 1rem;
+
+    margin-left: 0.5rem;
+  }
+  
+  .legendTitle
+{
+  
+  font-size: 0.75rem;
+}
   #class-search
   {
     width: 150px;
